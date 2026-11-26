@@ -93,4 +93,38 @@ export const EFFECTS = {
   return vec4f(col, 1.0);
 }`,
   },
+  periwinkle: {
+    name: "Periwinkle day",
+    blurb: "Soft drifting color clouds for frosted glass pages, the chasebuilds.github.io backdrop.",
+    wgsl: HEAD + /* wgsl */ `
+@fragment fn fs_main(@location(0) uv: vec2f) -> @location(0) vec4f {
+  let p = aspectUv(uv); let t = params.time * 0.05;
+  let w = vec2f(fbm(p * 1.3 + t), fbm(p * 1.3 - t + 4.0)) - 0.5;
+  let q = p + w * 0.5 + (params.mouse - 0.5) * 0.06;
+  var col = mix(vec3f(0.706, 0.737, 0.902), vec3f(0.827, 0.843, 0.953), uv.y);
+  col = mix(col, vec3f(0.933, 0.941, 1.000), smoothstep(0.7, 0.0, length(vec2f(p.x * 0.8, p.y - 0.5))) * 0.8);
+  col = mix(col, vec3f(0.788, 0.722, 0.925), smoothstep(0.55, 0.0, length(q - vec2f(-0.6 + 0.1 * sin(t * 3.0), 0.15))) * 0.75);
+  col = mix(col, vec3f(0.663, 0.776, 0.933), smoothstep(0.6, 0.0, length(q - vec2f(0.65, -0.05 + 0.1 * cos(t * 2.0)))) * 0.75);
+  col = mix(col, vec3f(0.725, 0.851, 0.812), smoothstep(0.5, 0.0, length(q - vec2f(0.1 * sin(t * 2.5), -0.55))) * 0.5);
+  col += (hash(uv * params.res) - 0.5) / 255.0;
+  return vec4f(col, 1.0);
+}`,
+  },
+  periwinkleNight: {
+    name: "Periwinkle night",
+    blurb: "Soft drifting color clouds for frosted glass pages, the chasebuilds.github.io backdrop.",
+    wgsl: HEAD + /* wgsl */ `
+@fragment fn fs_main(@location(0) uv: vec2f) -> @location(0) vec4f {
+  let p = aspectUv(uv); let t = params.time * 0.05;
+  let w = vec2f(fbm(p * 1.3 + t), fbm(p * 1.3 - t + 4.0)) - 0.5;
+  let q = p + w * 0.5 + (params.mouse - 0.5) * 0.06;
+  var col = mix(vec3f(0.106, 0.125, 0.251), vec3f(0.165, 0.188, 0.376), uv.y);
+  col = mix(col, vec3f(0.243, 0.275, 0.565), smoothstep(0.7, 0.0, length(vec2f(p.x * 0.8, p.y - 0.5))) * 0.8);
+  col = mix(col, vec3f(0.231, 0.184, 0.416), smoothstep(0.55, 0.0, length(q - vec2f(-0.6 + 0.1 * sin(t * 3.0), 0.15))) * 0.75);
+  col = mix(col, vec3f(0.141, 0.255, 0.431), smoothstep(0.6, 0.0, length(q - vec2f(0.65, -0.05 + 0.1 * cos(t * 2.0)))) * 0.75);
+  col = mix(col, vec3f(0.122, 0.290, 0.275), smoothstep(0.5, 0.0, length(q - vec2f(0.1 * sin(t * 2.5), -0.55))) * 0.5);
+  col += (hash(uv * params.res) - 0.5) / 255.0;
+  return vec4f(col, 1.0);
+}`,
+  },
 };

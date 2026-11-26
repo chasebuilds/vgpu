@@ -1,6 +1,6 @@
 # Chase Builds hero effects
 
-Four WebGPU backgrounds for small business sites, built on vgpu. Live demo: https://chasebuilds.github.io/vgpu/chasebuilds/effects/
+Six WebGPU backgrounds for small business sites, built on vgpu. Live demo: https://chasebuilds.github.io/vgpu/chasebuilds/effects/
 
 | Effect | Looks like |
 |---|---|
@@ -8,6 +8,7 @@ Four WebGPU backgrounds for small business sites, built on vgpu. Live demo: http
 | `glass` | Soft blobs that melt together and follow the mouse |
 | `embers` | Sparks rising through dark |
 | `prism` | A beam split into a rainbow, aimed with the mouse |
+| `periwinkle`, `periwinkleNight` | Soft color clouds, the live backdrop on chasebuilds.github.io |
 
 ## Use it
 
