@@ -1,4 +1,6 @@
 > **Chase Builds fork of [vgpu](https://github.com/vercel-labs/vgpu).** We keep this copy to build WebGPU hero effects and visuals for client sites and [chasebuilds.github.io](https://chasebuilds.github.io). The original library is by Vercel Labs and stays under its MIT license (see [LICENSE](LICENSE)). Upstream docs and examples: [vgpu.sh](https://vgpu.sh).
+>
+> **Our additions:** [Chase Builds hero effects](chasebuilds/) (aurora, liquid glass, embers, prism), with a [live demo](https://chasebuilds.github.io/vgpu/chasebuilds/effects/).
 
 # vgpu
 

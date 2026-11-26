@@ -1,0 +1,26 @@
+// Mount a Chase Builds effect on a <canvas>. Falls back to the canvas's CSS background when WebGPU is missing.
+import { clock, effect, frameLoop, init, surface } from "https://esm.sh/vgpu@0.6.0";
+import { prepareShader } from "https://esm.sh/@vgpu/wgsl@0.6.0/prepare";
+import { EFFECTS } from "./effects.js";
+
+export async function mountHero(canvas, name = "aurora") {
+  if (!navigator.gpu) return null;
+  const gpu = await init();
+  const surf = surface(gpu, canvas, { dpr: [1, 2] });
+  const mouse = [0.5, 0.5];
+  canvas.addEventListener("pointermove", (e) => {
+    const r = canvas.getBoundingClientRect();
+    mouse[0] = (e.clientX - r.left) / r.width;
+    mouse[1] = 1 - (e.clientY - r.top) / r.height;
+  });
+  const cache = {};
+  const make = (n) => (cache[n] ??= effect(gpu, prepareShader(EFFECTS[n].wgsl), { set: { params: { res: surf.size, mouse, time: 0 } } }));
+  let fx = make(name);
+  surf.onResize(() => fx.set({ params: { res: surf.size } }));
+  const time = clock(gpu);
+  frameLoop(gpu, (frame) => {
+    fx.set({ params: { time: time.time, mouse, res: surf.size } });
+    frame.pass(surf, fx);
+  });
+  return { use: (n) => { fx = make(n); }, gpu };
+}
