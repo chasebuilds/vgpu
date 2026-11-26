@@ -6,13 +6,16 @@ import { EFFECTS } from "./effects.js";
 export async function mountHero(canvas, name = "aurora") {
   if (!navigator.gpu) return null;
   const gpu = await init();
-  const surf = surface(gpu, canvas, { dpr: [1, 2] });
+  const surf = surface(gpu, canvas, { dpr: [1, matchMedia("(pointer: coarse)").matches ? 1.5 : 2] });
   const mouse = [0.5, 0.5];
-  canvas.addEventListener("pointermove", (e) => {
+  // Window-level so the pointer still steers the effect when text or panels sit on top; works for touch drags too.
+  const track = (e) => {
     const r = canvas.getBoundingClientRect();
     mouse[0] = (e.clientX - r.left) / r.width;
     mouse[1] = 1 - (e.clientY - r.top) / r.height;
-  });
+  };
+  addEventListener("pointermove", track, { passive: true });
+  addEventListener("pointerdown", track, { passive: true });
   const cache = {};
   const make = (n) => (cache[n] ??= effect(gpu, prepareShader(EFFECTS[n].wgsl), { set: { params: { res: surf.size, mouse, time: 0 } } }));
   let fx = make(name);

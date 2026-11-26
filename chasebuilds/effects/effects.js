@@ -75,7 +75,10 @@ export const EFFECTS = {
     blurb: "A beam that splits into a soft rainbow, aimed with the mouse.",
     wgsl: HEAD + /* wgsl */ `
 @fragment fn fs_main(@location(0) uv: vec2f) -> @location(0) vec4f {
-  let p = aspectUv(uv);
+  let a = params.res.x / params.res.y;
+  // Sit right of the headline on wide screens, above it on phones.
+  let off = select(vec2f(0.0, -0.24), vec2f(a * 0.2, 0.0), a > 1.0);
+  let p = (aspectUv(uv) - off) * select(1.8, 1.0, a > 1.0);
   let ang = (params.mouse.y - 0.5) * 0.6 + 0.08 * sin(params.time * 0.5);
   var col = vec3f(0.04, 0.035, 0.04);
   let beamIn = smoothstep(0.012, 0.0, abs(p.y - ang * 0.0)) * step(p.x, 0.0);
