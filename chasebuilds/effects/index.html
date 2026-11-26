@@ -22,8 +22,8 @@ a{color:inherit}
 .bar nav{display:flex;gap:8px}
 .pill{display:inline-flex;align-items:center;height:30px;padding:0 12px;border-radius:7px;border:1px solid var(--line-2);background:var(--bg);font-size:12.5px;font-weight:500;text-decoration:none}
 .pill.solid{background:var(--txt);color:var(--bg);border-color:var(--txt)}
-#c{position:fixed;inset:0;width:100vw;height:100vh;display:block;z-index:0;background:radial-gradient(60% 50% at 70% 40%,#3a2418,#050505 70%)}
-.hero{position:relative;z-index:1;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:96px 20px 40px;max-width:1200px;margin:0 auto;pointer-events:none}
+#c{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:-1;background:radial-gradient(60% 50% at 70% 40%,#3a2418,#050505 70%)}
+.hero{position:relative;z-index:1;isolation:isolate;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:96px max(20px,calc((100% - 1160px) / 2)) 40px;pointer-events:none}
 .hero h1{margin:0;font:400 clamp(72px,16vw,148px)/.9 "Instrument Serif",Georgia,serif;letter-spacing:-.02em}
 .hero h2{margin:14px 0 18px;font-weight:500;font-size:clamp(22px,4.4vw,34px);line-height:1.15;letter-spacing:-.02em;max-width:16ch}
 .tabs{display:flex;gap:6px 8px;flex-wrap:wrap;font-size:12.5px;color:var(--dim);pointer-events:auto}
@@ -67,13 +67,13 @@ footer{position:relative;z-index:2;background:var(--bg);border-top:1px solid var
 </style>
 </head>
 <body>
-<canvas id="c" aria-hidden="true"></canvas>
 <header class="bar">
   <a class="crumb" href="https://chasebuilds.github.io"><span class="mark">CB</span><span class="slash">/</span><span class="word">effects</span></a>
   <nav><a class="pill" href="#examples">Examples</a><a class="pill" href="https://github.com/chasebuilds/vgpu/tree/canary/chasebuilds/effects">GitHub</a><a class="pill solid" href="https://chasebuilds.github.io">Chase Builds</a></nav>
 </header>
 
 <section class="hero">
+  <canvas id="c" aria-hidden="true"></canvas>
   <h1>effects</h1>
   <h2>Live backgrounds that make a small site stand out.</h2>
   <div class="tabs" role="tablist" id="tabs"></div>
