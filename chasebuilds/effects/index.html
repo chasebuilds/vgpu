@@ -43,6 +43,8 @@ a{color:inherit}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
 .card{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--panel);transition:border-color .15s}
 .card:hover,.card:focus-visible{border-color:#555}
+.card[aria-pressed=true]{border-color:#ededed;box-shadow:0 0 0 1px #ededed}
+.card[aria-pressed=true] b::after{content:"  Running";font:500 11px Geist,sans-serif;color:#8f8f8f}
 .card img{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;background:#111}
 .card .body{padding:12px 14px 14px}
 .card b{display:block;font-weight:600;font-size:14px}
@@ -107,11 +109,13 @@ let hero, current;
 const snippetFor = (k) => `mountHero(canvas, "${k}")`;
 function choose(k, scroll) {
   current = k;
-  hero?.use(k);
+  if (hero) hero.use(k);
+  else $("c").style.background = `center / cover url(thumbs/${k}.jpg), #050505`;
+  for (const c of $("grid").children) c.setAttribute("aria-pressed", c.dataset.k === k);
   for (const b of $("tabs").querySelectorAll("button")) b.setAttribute("aria-selected", b.dataset.k === k);
   for (const a of $("side").children) a.setAttribute("aria-current", a.dataset.k === k);
   $("snippet").textContent = snippetFor(k);
-  $("now").textContent = hero ? `Now running: ${EFFECTS[k].name}. ${EFFECTS[k].blurb}` : "WebGPU is not available in this browser, so the background is a still gradient. Try Chrome, Edge or a recent Safari.";
+  $("now").textContent = hero ? `Now running: ${EFFECTS[k].name}. ${EFFECTS[k].blurb}` : `This browser can't run WebGPU, so you are seeing a still of ${EFFECTS[k].name}. Open in Chrome or Edge to see it move.`;
   history.replaceState(null, "", "#" + k);
   if (scroll) scrollTo({ top: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
 }
@@ -126,7 +130,7 @@ keys.forEach((k, i) => {
   a.onclick = (ev) => { ev.preventDefault(); choose(k, true); };
   $("side").append(a);
   const c = document.createElement("button");
-  c.type = "button"; c.className = "card";
+  c.type = "button"; c.className = "card"; c.dataset.k = k;
   c.innerHTML = `<img src="thumbs/${k}.jpg" alt="" loading="lazy" width="640" height="400"><div class="body"><b>${e.name}</b><p>${e.blurb}</p><div class="tags">${TAGS[k].map((t) => `<i>${t}</i>`).join("")}</div></div>`;
   c.onclick = () => choose(k, true);
   $("grid").append(c);
